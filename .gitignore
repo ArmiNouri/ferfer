@@ -1,0 +1,7 @@
+.idea/
+FerFer.iml
+db/*
+db0/*
+files/*
+target/*
+src/config.properties

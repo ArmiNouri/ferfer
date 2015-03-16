@@ -1,0 +1,13 @@
+#oauth parameters
+#your friendfeed.com username
+username = your-username-here
+#you can find your remote key at http://friendfeed.com/account/api
+remotekey = your-remotekey-here
+
+#home directory
+#this is where your downloaded content goes
+HOME = /your/download/path/here/
+
+#maximum allowed size for the ff_posts table
+#the app terminates once it exceeds the maximum size, but first it completes the latest page on the stack
+maxsize = 1.0
