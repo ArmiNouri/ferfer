@@ -17,7 +17,7 @@ For more information on indexing and relations, you can inspect the application'
 
 
 ##Configuration parameters
-* parameters are specified in "project.home/source/config.properties.example" (make sure to rename this file to config.properties prior to runnign the app)
+* parameters are specified in "{project.home}/src/config.properties.example" (make sure to rename this file to config.properties prior to runnign the app)
 * username is your username on friendfeed.com
 * remotekey can be obtained by visiting http://friendfeed.com/account/api
 * HOME specifies where you like the relational files to be downloaded

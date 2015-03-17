@@ -52,8 +52,9 @@ public class IO {
 				String line = scanner.nextLine();
 				visited.add(line);
 			}
+			scanner.close();
 		} catch(FileNotFoundException e) {
-			logger.error("Couldn't open file containing visited accounts: " + path);
+			logger.warn("Couldn't open file containing visited accounts: " + path + ". Treating stack as empty.");
 		}
 		return visited;
 	}
@@ -68,7 +69,7 @@ public class IO {
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(unvisitedPath, true)));
 			while(!unvisited.empty()){
 				String line = unvisited.pop();
-				writer.print(line + "\n");
+				writer.write(line + "\n");
 			}
 			writer.close();
 
@@ -77,13 +78,16 @@ public class IO {
 				file.createNewFile();
 			}
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(visitedPath, true)));
-			for(String line : visited){
-				writer.print(line + "\n");
+			Iterator it = visited.iterator();
+			while(it.hasNext()){
+				String line = it.next().toString();
+				writer.write(line + "\n");
 				visited.remove(line);
 			}
 			writer.close();
 		}catch(Exception e){
-			logger.error("Failed to write output to files prior to exit: " + e.getMessage());
+			logger.error("Failed to write output to files prior to exit.\n");
+			e.printStackTrace();
 		}
 	}
 

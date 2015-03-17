@@ -106,7 +106,11 @@ public class FerFer {
     }
 
     public void crawlAll() {
-        persistStack();
+        //load stack params
+        this.visited = io.loadVisited(config.HOME + VISITED);
+        this.unvisited = io.loadUnvisited(config.HOME + UNVISITED);
+        unvisited.push(config.username);
+        //iterate through unvisited pages
         while(unvisited.size() > 0) {
             String feedName = unvisited.pop();
             if(!visited.contains(feedName)) {
@@ -164,21 +168,23 @@ public class FerFer {
                         io.writeToFile(services.table_path, services.header, services.toString());
                     }
             }
+            else{
+                return;
+            }
         } catch (MalformedURLException e) {
             logger.warn("Malformed URL: " + feed_url);
         } catch (IOException e) {
             logger.error("Failed to write to output files: " + e.getMessage());
         } catch(Exception e) {
-            logger.warn("Received an error message " + e.getMessage() + ". Exiting app...");
-            persistStack();
+            logger.warn("Received an error message " + e.getMessage() + ". The app will stop downloading " + feedName + "...");
             return;
         }
     }
 
-    public void getFeed(String name) {
+    public void getFeed(String feedName) {
         int offset = 0;
         while(true) {
-            String feed_url = FF_API_FEED + name + "?start=" + offset;
+            String feed_url = FF_API_FEED + feedName + "?start=" + offset;
             try {
                 URL feedurl = new URL(feed_url);
                 HttpURLConnection connection = (HttpURLConnection)feedurl.openConnection();
@@ -247,13 +253,14 @@ public class FerFer {
                         }
                     }
                 }
+                else
+                    return;
             }catch(MalformedURLException e){
                 logger.warn("Malformed URL: " + feed_url);
             }catch(IOException e){
                 logger.error("Failed to write to write to output files: " + e.getMessage());
             }catch(Exception e) {
-                logger.warn("Received an error message " + e.getMessage() + ". Exiting app...");
-                persistStack();
+                logger.warn("Received an error message " + e.getMessage() + ". The app will stop downloading " + feedName + "...");
                 return;
             }
             offset += 30;
@@ -262,7 +269,6 @@ public class FerFer {
 
     public static void main(String[] args) {
         FerFer ff = new FerFer();
-        ff.unvisited.push(ff.config.username);
         ff.crawlAll();
     }
 }
