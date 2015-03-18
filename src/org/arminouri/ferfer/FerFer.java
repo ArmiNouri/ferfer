@@ -55,7 +55,7 @@ public class FerFer {
             br.close();
             return sb.toString();
         }catch(IOException e) {
-            logger.warn("Failed to get proper response from " + connection.getURL().toString() + "\nwith error message: " + e.getMessage());
+            logger.warn("Failed to get proper response from " + connection.getURL().toString() + "\nwith error message: " + e);
             return null;
         }
     }
@@ -95,7 +95,7 @@ public class FerFer {
         }catch(MalformedURLException e){
             logger.warn("Malformed URL: " + picture_url);
         }catch(IOException e){
-            logger.warn("Failed to download picture: " + e.getMessage());
+            logger.warn("Failed to download picture: " + e);
         }
     }
 
@@ -174,16 +174,18 @@ public class FerFer {
         } catch (MalformedURLException e) {
             logger.warn("Malformed URL: " + feed_url);
         } catch (IOException e) {
-            logger.error("Failed to write to output files: " + e.getMessage());
+            logger.error("Failed to write to output files: " + e);
         } catch(Exception e) {
-            logger.warn("Received an error message " + e.getMessage() + ". The app will stop downloading " + feedName + "...");
+            logger.warn("Received an error message " + e + ". The app will stop downloading " + feedName + "...");
             return;
         }
     }
 
     public void getFeed(String feedName) {
         int offset = 0;
-        while(true) {
+        boolean cont = true;
+        String lastsb = "";
+        while(cont) {
             String feed_url = FF_API_FEED + feedName + "?start=" + offset;
             try {
                 URL feedurl = new URL(feed_url);
@@ -194,8 +196,15 @@ public class FerFer {
                 int status = connection.getResponseCode();
                 if(status == 200 || status == 201) {
                     String sb = getResponse(connection);
+                    if(lastsb.equals(sb)) {
+                        cont = false;
+                        return;
+                    }
                     Feed feed = mapper.readValue(sb, Feed.class);
-                    if(feed.entries == null || feed.entries.length == 0) break;
+                    if(feed.entries == null || feed.entries.length == 0) {
+                        cont = false;
+                        return;
+                    }
                     for(Feed.Entry  entry : feed.entries) {
                         FF_Posts post = new FF_Posts(entry.id, entry.date, entry.from.id, entry.url, entry.body, entry.via == null? "" : entry.via.url == null? "" : entry.via.url, entry.via == null ? "" : entry.via.name == null ? "" : entry.via.name, mapper.writeValueAsString(entry));
                         io.writeToFile(post.table_path, post.header, post.toString());
@@ -252,15 +261,16 @@ public class FerFer {
                             io.writeToFile(post_hyperlink.table_path, post_hyperlink.header, post_hyperlink.toString());
                         }
                     }
+                    lastsb = sb;
                 }
                 else
                     return;
             }catch(MalformedURLException e){
                 logger.warn("Malformed URL: " + feed_url);
             }catch(IOException e){
-                logger.error("Failed to write to write to output files: " + e.getMessage());
+                logger.error("Failed to write to output files: " + e);
             }catch(Exception e) {
-                logger.warn("Received an error message " + e.getMessage() + ". The app will stop downloading " + feedName + "...");
+                logger.warn("Received an error message " + e + ". The app will stop downloading " + feedName + "...");
                 return;
             }
             offset += 30;

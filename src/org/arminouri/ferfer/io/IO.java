@@ -1,7 +1,7 @@
 package org.arminouri.ferfer.io;
 
 /**
- * Created by armineh on 3/11/15.
+ * Created by arminouri on 3/11/15.
  */
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class IO {
 				writer.write(row + "\n");
 				writer.close();
 			}catch(Exception e){
-                logger.error("Failed to write: " + row + "\ninto file: " + fileName + ".\nError: " + e.getMessage());
+                logger.error("Failed to write: " + row + "\ninto file: " + fileName + ".\nError: " + e);
             }
     }
 
@@ -66,7 +66,7 @@ public class IO {
 			if(!file.exists()) {
 				file.createNewFile();
 			}
-			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(unvisitedPath, true)));
+			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(unvisitedPath)));
 			while(!unvisited.empty()){
 				String line = unvisited.pop();
 				writer.write(line + "\n");
@@ -77,16 +77,14 @@ public class IO {
 			if(!file.exists()) {
 				file.createNewFile();
 			}
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(visitedPath, true)));
-			Iterator it = visited.iterator();
-			while(it.hasNext()){
-				String line = it.next().toString();
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(visitedPath)));
+			for(String line : visited){
 				writer.write(line + "\n");
-				visited.remove(line);
 			}
+			visited.clear();
 			writer.close();
 		}catch(Exception e){
-			logger.error("Failed to write output to files prior to exit.\n");
+			logger.error("Failed to write output to files prior to exit: \n" + e);
 			e.printStackTrace();
 		}
 	}

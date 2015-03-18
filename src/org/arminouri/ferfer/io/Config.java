@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Created by armineh on 3/15/15.
+ * Created by arminouri on 3/15/15.
  */
 public class Config {
     private static Logger logger = LoggerFactory.getLogger(Config.class);
