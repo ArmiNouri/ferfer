@@ -99,29 +99,44 @@ public class FerFer {
         }
     }
 
+    public void loadStack() {
+        this.visited = io.loadVisited(config.HOME + VISITED);
+        this.unvisited = io.loadUnvisited(config.HOME + UNVISITED);
+    }
     public void persistStack() {
-        io.restartApp(config.HOME + VISITED, visited, config.HOME + UNVISITED, unvisited);
+        io.writeStack(config.HOME + VISITED, visited, config.HOME + UNVISITED, unvisited);
         this.visited = io.loadVisited(config.HOME + VISITED);
         this.unvisited = io.loadUnvisited(config.HOME + UNVISITED);
     }
 
+    public void crawlOnce(String feedName) {
+        getFeedInfo(feedName);
+        getFeed(feedName);
+        visited.add(feedName);
+        persistStack();
+        if(io.checkFileSize(config.HOME + FF_Posts.table_name) > config.maxsize) {
+            logger.warn("ff_posts table exceeded 1 GBs of data. Terminating app...");
+            return;
+        }
+    }
+
+    public void crawlOnce(){
+        loadStack();
+        String feedName = unvisited.pop();
+        if(!visited.contains(feedName)) {
+            crawlOnce(feedName);
+        }
+    }
+
     public void crawlAll() {
         //load stack params
-        this.visited = io.loadVisited(config.HOME + VISITED);
-        this.unvisited = io.loadUnvisited(config.HOME + UNVISITED);
+        loadStack();
         unvisited.push(config.username);
         //iterate through unvisited pages
         while(unvisited.size() > 0) {
             String feedName = unvisited.pop();
             if(!visited.contains(feedName)) {
-                getFeedInfo(feedName);
-                getFeed(feedName);
-                visited.add(feedName);
-                persistStack();
-                if(io.checkFileSize(config.HOME + FF_Posts.table_name) > config.maxsize) {
-                    logger.warn("ff_posts table exceeded 1 GBs of data. Terminating app...");
-                    return;
-                }
+                crawlOnce(feedName);
             }
         }
     }
@@ -184,7 +199,7 @@ public class FerFer {
     public void getFeed(String feedName) {
         int offset = 0;
         boolean cont = true;
-        String lastsb = "";
+        Feed oldfeed = null;
         while(cont) {
             String feed_url = FF_API_FEED + feedName + "?start=" + offset;
             try {
@@ -196,12 +211,12 @@ public class FerFer {
                 int status = connection.getResponseCode();
                 if(status == 200 || status == 201) {
                     String sb = getResponse(connection);
-                    if(lastsb.equals(sb)) {
+                    Feed feed = mapper.readValue(sb, Feed.class);
+                    if(feed.entries == null || feed.entries.length == 0) {
                         cont = false;
                         return;
                     }
-                    Feed feed = mapper.readValue(sb, Feed.class);
-                    if(feed.entries == null || feed.entries.length == 0) {
+                    if(oldfeed != null && oldfeed.entries != null && oldfeed.entries.length > 0 && oldfeed.entries[0].id.equals(feed.entries[0].id)) {
                         cont = false;
                         return;
                     }
@@ -261,10 +276,12 @@ public class FerFer {
                             io.writeToFile(post_hyperlink.table_path, post_hyperlink.header, post_hyperlink.toString());
                         }
                     }
-                    lastsb = sb;
+                    oldfeed = feed;
                 }
-                else
+                else {
+                    cont = false;
                     return;
+                }
             }catch(MalformedURLException e){
                 logger.warn("Malformed URL: " + feed_url);
             }catch(IOException e){
@@ -279,6 +296,6 @@ public class FerFer {
 
     public static void main(String[] args) {
         FerFer ff = new FerFer();
-        ff.crawlAll();
+        ff.crawlOnce();
     }
 }

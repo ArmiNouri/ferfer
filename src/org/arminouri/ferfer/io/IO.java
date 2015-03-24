@@ -59,7 +59,7 @@ public class IO {
 		return visited;
 	}
 
-	public void restartApp(String visitedPath, Set<String> visited, String unvisitedPath, Stack<String> unvisited) {
+	public void writeStack(String visitedPath, Set<String> visited, String unvisitedPath, Stack<String> unvisited) {
 		//replace current visited/unvisited records
 		try {
 			File file =new File(unvisitedPath);
