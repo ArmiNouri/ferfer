@@ -295,7 +295,36 @@ public class FerFer {
     }
 
     public static void main(String[] args) {
+        String choice1 = "";
+        String choice2 = "";
         FerFer ff = new FerFer();
-        ff.crawlOnce();
+        while (!choice1.equals("1") && !choice1.equals("2")) {
+            System.out.println("What mode would you like to run the program in?");
+            System.out.println("1 - Full mode (begins crawling from your page and runs a depth-first search traversal that collects the feeds of your followers, your followers' follders, and so on.");
+            System.out.println("2 - Single-user mode (only downloads a single user's feed.");
+            BufferedReader choice1Input = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                choice1 = choice1Input.readLine();
+                if(choice1.equals("1"))
+                    ff.crawlAll();
+                else if (choice1.equals("2")) {
+                    System.out.println("Enter the username of the person whose feed you'd like to download");
+                    BufferedReader choice2Input = new BufferedReader(new InputStreamReader(System.in));
+                    try {
+                        choice2 = choice2Input.readLine();
+                        ff.crawlOnce(choice2);
+                    } catch(IOException e) {
+                        System.out.println("IO error trying to read your choice!");
+                        System.exit(1);
+                    }
+                }
+                else {
+                    System.out.println("Please enter 1 to choose the first option, and 2 to choose the second option.");
+                }
+            } catch (IOException ioe) {
+                System.out.println("IO error trying to read your choice!");
+                System.exit(1);
+            }
+        }
     }
 }
