@@ -14,10 +14,13 @@ For more information on indexing and relations, you can inspect the application'
 * enter your remote key on line 5
 * enter the full path to the directory where you'd like to store the files on line 9
 * build and run org.arminouri.ferfer.FerFer.main
+* the app will guide you through the rest of the steps, mainly whether you'd like to run it in full mode or single-user mode
+..* the full mode will do a full DFS traversal until the ff_posts_table exceeds its size limit
+..* the single-user mode will only crawl a single user's feed which you specify
 
 
 ##Configuration parameters
-* parameters are specified in "{project.home}/src/config.properties.example" (make sure to rename this file to config.properties prior to runnign the app)
+* parameters are specified in "{project.home}/src/config.properties.example" (make sure to rename this file to config.properties prior to running the app)
 * username is your username on friendfeed.com
 * remotekey can be obtained by visiting http://friendfeed.com/account/api
 * HOME specifies where you like the relational files to be downloaded

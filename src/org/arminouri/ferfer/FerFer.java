@@ -300,8 +300,8 @@ public class FerFer {
         FerFer ff = new FerFer();
         while (!choice1.equals("1") && !choice1.equals("2")) {
             System.out.println("What mode would you like to run the program in?");
-            System.out.println("1 - Full mode (begins crawling from your page and runs a depth-first search traversal that collects the feeds of your followers, your followers' follders, and so on.");
-            System.out.println("2 - Single-user mode (only downloads a single user's feed.");
+            System.out.println("1 - Full mode (begins crawling from your page and runs a depth-first search traversal that collects the feeds of your followers, your followers' followers, and so on).");
+            System.out.println("2 - Single-user mode (only downloads a single user's feed).");
             BufferedReader choice1Input = new BufferedReader(new InputStreamReader(System.in));
             try {
                 choice1 = choice1Input.readLine();
@@ -313,7 +313,7 @@ public class FerFer {
                     try {
                         choice2 = choice2Input.readLine();
                         ff.crawlOnce(choice2);
-                    } catch(IOException e) {
+                    } catch(IOException ioe) {
                         System.out.println("IO error trying to read your choice!");
                         System.exit(1);
                     }
