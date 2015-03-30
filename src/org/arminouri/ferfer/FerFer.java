@@ -110,6 +110,7 @@ public class FerFer {
     }
 
     public void crawlOnce(String feedName) {
+        loadStack();
         getFeedInfo(feedName);
         getFeed(feedName);
         visited.add(feedName);
