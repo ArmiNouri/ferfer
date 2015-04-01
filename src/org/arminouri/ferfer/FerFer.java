@@ -110,7 +110,6 @@ public class FerFer {
     }
 
     public void crawlOnce(String feedName) {
-        loadStack();
         getFeedInfo(feedName);
         getFeed(feedName);
         visited.add(feedName);
@@ -313,6 +312,7 @@ public class FerFer {
                     BufferedReader choice2Input = new BufferedReader(new InputStreamReader(System.in));
                     try {
                         choice2 = choice2Input.readLine();
+                        ff.loadStack();
                         ff.crawlOnce(choice2);
                     } catch(IOException ioe) {
                         System.out.println("IO error trying to read your choice!");

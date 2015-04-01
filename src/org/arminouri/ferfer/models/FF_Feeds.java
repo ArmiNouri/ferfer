@@ -11,7 +11,7 @@ public class FF_Feeds extends Table {
     public String get_table_name(){
         return this.table_name;
     }
-    public static final String header = "feed_id\tsup_id\tdescription\ttype\tname\tprivate\tpicture_url\tpicture_address feed_json";
+    public static final String header = "feed_id\tsup_id\tdescription\ttype\tname\tprivate\tpicture_url\tpicture_address\tfeed_json";
     public String feed_id;
     public String sup_id;
     public String description;

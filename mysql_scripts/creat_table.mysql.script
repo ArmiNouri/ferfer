@@ -1,0 +1,136 @@
+CREATE TABLE `ff_feed_admins` (
+  `feed_id` varchar(40) NOT NULL DEFAULT '',
+  `admin_id` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`feed_id`,`admin_id`),
+  CONSTRAINT `ff_feed_admins_fk` FOREIGN KEY (`feed_id`) REFERENCES `ff_feeds` (`feed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_feed_services` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `feed_id` varchar(40) NOT NULL DEFAULT '',
+  `service_id` varchar(40) NOT NULL DEFAULT '',
+  `username` varchar(80) DEFAULT NULL,
+  `profile` varchar(800) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ff_feed_services_fk` (`feed_id`),
+  KEY `ff_feed_services_fk2` (`service_id`),
+  CONSTRAINT `ff_feed_services_fk` FOREIGN KEY (`feed_id`) REFERENCES `ff_feeds` (`feed_id`),
+  CONSTRAINT `ff_feed_services_fk2` FOREIGN KEY (`service_id`) REFERENCES `ff_services` (`service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=338 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_feed_subscribers` (
+  `feed_id` varchar(40) NOT NULL DEFAULT '',
+  `subscriber_id` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`feed_id`,`subscriber_id`),
+  CONSTRAINT `ff_feed_subscribers_fk` FOREIGN KEY (`feed_id`) REFERENCES `ff_feeds` (`feed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_feed_subscriptions` (
+  `feed_id` varchar(40) NOT NULL DEFAULT '',
+  `subscription_id` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`feed_id`,`subscription_id`),
+  CONSTRAINT `ff_feed_subscriptions_fk` FOREIGN KEY (`feed_id`) REFERENCES `ff_feeds` (`feed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_feeds` (
+  `feed_id` varchar(40) NOT NULL DEFAULT '',
+  `sup_id` varchar(40) NOT NULL DEFAULT '',
+  `description` varchar(1000) DEFAULT NULL,
+  `type` varchar(40) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `private` varchar(5) NOT NULL DEFAULT '',
+  `picture_url` varchar(400) DEFAULT NULL,
+  `picture_address` varchar(800) DEFAULT NULL,
+  `feed_json` longblob NOT NULL,
+  PRIMARY KEY (`feed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_comment_hyperlinks` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `commend_id` varchar(80) NOT NULL DEFAULT '',
+  `hyperlink` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34282 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_comments` (
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `date` varchar(40) NOT NULL DEFAULT '',
+  `comment_id` varchar(80) NOT NULL DEFAULT '',
+  `body` varchar(25000) CHARACTER SET latin1 DEFAULT NULL,
+  `from_id` varchar(40) NOT NULL DEFAULT '',
+  `via_url` varchar(200) DEFAULT NULL,
+  `via_name` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`post_id`,`comment_id`),
+  CONSTRAINT `ff_post_comments_fk` FOREIGN KEY (`post_id`) REFERENCES `ff_posts` (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_files` (
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `url` varchar(400) DEFAULT NULL,
+  `icon` varchar(200) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `name` varchar(400) NOT NULL DEFAULT '',
+  `size` int(11) DEFAULT NULL,
+  `address` varchar(800) NOT NULL DEFAULT '',
+  PRIMARY KEY (`post_id`),
+  CONSTRAINT `ff_post_files_fk` FOREIGN KEY (`post_id`) REFERENCES `ff_posts` (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_hyperlinks` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `hyperlink` varchar(800) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `ff_post_hyperlinks_fk` (`post_id`),
+  CONSTRAINT `ff_post_hyperlinks_fk` FOREIGN KEY (`post_id`) REFERENCES `ff_posts` (`post_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=367126 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_likes` (
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `date` varchar(40) NOT NULL DEFAULT '',
+  `from_id` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`post_id`),
+  CONSTRAINT `ff_post_likes_fk` FOREIGN KEY (`post_id`) REFERENCES `ff_posts` (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_thumbnails` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `url` varchar(1200) NOT NULL DEFAULT '',
+  `link` varchar(800) NOT NULL DEFAULT '',
+  `player` varchar(800) DEFAULT NULL,
+  `width` int(10) DEFAULT NULL,
+  `height` int(10) DEFAULT NULL,
+  `address` varchar(200) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `ff_post_thumbnails_fk` (`post_id`),
+  CONSTRAINT `ff_post_thumbnails_fk` FOREIGN KEY (`post_id`) REFERENCES `ff_posts` (`post_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=573653 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_post_to` (
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `to_id` varchar(40) NOT NULL DEFAULT '',
+  `to_direct` varchar(5) NOT NULL DEFAULT '',
+  PRIMARY KEY (`post_id`,`to_id`),
+  CONSTRAINT `ff_post_to` FOREIGN KEY (`post_id`) REFERENCES `ff_posts` (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_posts` (
+  `post_id` varchar(40) NOT NULL DEFAULT '',
+  `date` varchar(40) NOT NULL DEFAULT '',
+  `from_id` varchar(40) NOT NULL DEFAULT '',
+  `url` varchar(200) NOT NULL DEFAULT '',
+  `body` varchar(4000) CHARACTER SET latin1 DEFAULT NULL,
+  `via_url` varchar(200) DEFAULT NULL,
+  `via_name` varchar(2000) DEFAULT NULL,
+  `post_json` longblob NOT NULL,
+  PRIMARY KEY (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ff_services` (
+  `service_id` varchar(100) NOT NULL DEFAULT '',
+  `name` varchar(400) DEFAULT NULL,
+  `url` varchar(800) DEFAULT NULL,
+  `icon` varchar(400) DEFAULT NULL,
+  PRIMARY KEY (`service_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

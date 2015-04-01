@@ -1,0 +1,14 @@
+LOAD DATA LOCAL INFILE '../db/ff_feed_admins.tsv' IGNORE into table ff_feed_admins fields terminated by '\t' enclosed by '''' lines terminated by '\n' (feed_id,admin_id);
+LOAD DATA LOCAL INFILE '../db/ff_feed_services.tsv' IGNORE into table ff_feed_services fields terminated by '\t' enclosed by '''' lines terminated by '\n' (feed_id,service_id,username,profile);
+LOAD DATA LOCAL INFILE '../db/ff_feed_subscribers.tsv' IGNORE into table ff_feed_subscribers fields terminated by '\t' enclosed by '''' lines terminated by '\n' (feed_id,subscriber_id);
+LOAD DATA LOCAL INFILE '../db/ff_feed_subscriptions.tsv' IGNORE into table ff_feed_subscriptions fields terminated by '\t' enclosed by '''' lines terminated by '\n' (feed_id,subscription_id);
+LOAD DATA LOCAL INFILE '../db/ff_feeds.tsv' IGNORE into table ff_feeds fields terminated by '\t' enclosed by '''' lines terminated by '\n' (feed_id,sup_id,description,type,name,private,picture_url,picture_address,feed_json);
+LOAD DATA LOCAL INFILE '../db/ff_post_comment_hyperlinks.tsv' IGNORE into table ff_post_comment_hyperlinks fields terminated by '\t' enclosed by '''' lines terminated by '\n' (comment_id,hyperlink);
+LOAD DATA LOCAL INFILE '../db/ff_post_comments.tsv' IGNORE into table ff_post_comments fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,date,comment_id,body,from_id,via_url,via_name);
+LOAD DATA LOCAL INFILE '../db/ff_post_files.tsv' IGNORE into table ff_post_files fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,url,icon,type,name,size,address);
+LOAD DATA LOCAL INFILE '../db/ff_post_hyperlinks.tsv' IGNORE into table ff_post_hyperlinks fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,hyperlink);
+LOAD DATA LOCAL INFILE '../db/ff_post_likes.tsv' IGNORE into table ff_post_likes fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,date,from_id);
+LOAD DATA LOCAL INFILE '../db/ff_post_thumbnails.tsv' IGNORE into table ff_post_thumbnails fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,url,link,player,width,height,address);
+LOAD DATA LOCAL INFILE '../db/ff_post_to.tsv' IGNORE into table ff_post_to fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,to_id,to_direct);
+LOAD DATA LOCAL INFILE '../db/ff_posts.tsv' IGNORE into table ff_posts fields terminated by '\t' enclosed by '''' lines terminated by '\n' (post_id,date,from_id,url,body,via_url,via_name,post_json);
+LOAD DATA LOCAL INFILE '../db/ff_services.tsv' IGNORE into table ff_services fields terminated by '\t' enclosed by '''' lines terminated by '\n' (service_id,name,url,icon);
