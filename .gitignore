@@ -2,6 +2,7 @@
 FerFer.iml
 db/*
 db0/*
+db_old/*
 files/*
 target/*
 src/config.properties
